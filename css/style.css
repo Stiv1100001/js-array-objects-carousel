@@ -53,6 +53,10 @@ div.my-next>span::after {
     line-height: 30px;
 }
 
+#container {
+    height: 100%;
+}
+
 #cover-image {
     width: 100%;
     height: 100%;

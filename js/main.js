@@ -48,7 +48,9 @@ function init() {
   coverImage.appendChild(mainTitle);
   coverImage.appendChild(mainSubtitle);
 
+  document.getElementById('my-before-carousel').innerHTML = '<h3>Awesome Carousel</h3>';
   generateCarousel(true);
+  createForm();
 
   document.querySelector('.my-next').addEventListener('click', () => {
     updateCurrentIndex('+');
@@ -63,6 +65,70 @@ function init() {
   });
 
   setInterval(autoNext, 3000, direction);
+}
+
+function addImageToCarousel() {
+  const title = document.getElementById('input-title');
+  const subtitle = document.getElementById('input-subtitle');
+  const img = document.getElementById('input-image');
+
+  const newItem = {
+    title: title.value,
+    text: subtitle.value,
+    img: `img/${img.value}`,
+  };
+
+  title.value = '';
+  subtitle.value = '';
+  img.value = '';
+
+  items.push(newItem);
+
+  generateCarousel();
+}
+
+function createForm() {
+  const form = document.createElement('div');
+  form.classList.add('d-flex', 'flex-column', 'justify-content-center', 'align-items-center');
+
+  const title = document.createElement('h4');
+  title.innerText = 'Insert new carousel image';
+
+  const inputTitle = document.createElement('input');
+  inputTitle.classList.add('form-control', 'mb-3');
+  inputTitle.placeholder = 'Title';
+  inputTitle.type = 'text';
+  inputTitle.id = 'input-title';
+
+  const inputSubtitle = document.createElement('input');
+  inputSubtitle.classList.add('form-control', 'mb-3');
+  inputSubtitle.placeholder = 'Subtitle';
+  inputSubtitle.type = 'text';
+  inputSubtitle.id = 'input-subtitle';
+
+  const inputImage = document.createElement('input');
+  inputImage.classList.add('form-control', 'mb-3');
+  inputImage.placeholder = 'Image';
+  inputImage.type = 'text';
+  inputImage.id = 'input-image';
+
+  const insertButton = document.createElement('button');
+  insertButton.classList.add('btn', 'btn-warning');
+  insertButton.innerText = 'Add';
+  insertButton.addEventListener('click', addImageToCarousel);
+
+  form.appendChild(title);
+  form.appendChild(inputTitle);
+  form.appendChild(inputSubtitle);
+  form.appendChild(inputImage);
+  form.appendChild(insertButton);
+
+  const col = document.createElement('div');
+  col.classList.add('col-4', 'offset-4');
+
+  col.appendChild(form);
+
+  document.querySelector('.row').appendChild(col);
 }
 
 function setCover(currentIndex) {
@@ -86,6 +152,19 @@ function setCover(currentIndex) {
 function generateCarousel(isInit = false) {
   const carouselContainer = document.querySelector('.my-thumbnails');
 
+  let container;
+
+  if (isInit) {
+    container = document.createElement('div');
+    container.id = 'container';
+  } else {
+    container = document.getElementById('container');
+  }
+
+  container.innerHTML = '';
+
+  carouselContainer.appendChild(container);
+
   for (let i = 0; i < items.length; i++) {
     const newCarouselImage = document.createElement('img');
 
@@ -95,7 +174,7 @@ function generateCarousel(isInit = false) {
     newCarouselImage.src = items[i].img;
     newCarouselImage.alt = items[i].title;
 
-    carouselContainer.appendChild(newCarouselImage);
+    container.appendChild(newCarouselImage);
   }
 
   if (isInit) {
