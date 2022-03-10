@@ -27,6 +27,7 @@ const items = [
 ];
 
 let currentImageIndex;
+let direction = 'right';
 
 function init() {
   // | Create Main img
@@ -48,6 +49,20 @@ function init() {
   coverImage.appendChild(mainSubtitle);
 
   generateCarousel(true);
+
+  document.querySelector('.my-next').addEventListener('click', () => {
+    updateCurrentIndex('+');
+    setCover(currentImageIndex);
+    direction = 'right';
+  });
+
+  document.querySelector('.my-previous').addEventListener('click', () => {
+    updateCurrentIndex('-');
+    setCover(currentImageIndex);
+    direction = 'left';
+  });
+
+  setInterval(autoNext, 3000, direction);
 }
 
 function setCover(currentIndex) {
@@ -89,20 +104,24 @@ function generateCarousel(isInit = false) {
   }
 }
 
-document.querySelector('.my-next').addEventListener('click', () => {
-  currentImageIndex++;
+function autoNext() {
+  if (direction === 'right') {
+    updateCurrentIndex('+');
+    setCover(currentImageIndex);
+  } else if (direction === 'left') {
+    updateCurrentIndex('-');
+    setCover(currentImageIndex);
+  }
+}
 
-  if (currentImageIndex === items.length) currentImageIndex = 0;
-
-  setCover(currentImageIndex);
-});
-
-document.querySelector('.my-previous').addEventListener('click', () => {
-  currentImageIndex--;
-
-  if (currentImageIndex < 0) currentImageIndex = items.length - 1;
-
-  setCover(currentImageIndex);
-});
+function updateCurrentIndex(plusMinus) {
+  if (plusMinus === '+') {
+    currentImageIndex++;
+    if (currentImageIndex === items.length) currentImageIndex = 0;
+  } else if (plusMinus === '-') {
+    currentImageIndex--;
+    if (currentImageIndex < 0) currentImageIndex = items.length - 1;
+  }
+}
 
 init();
